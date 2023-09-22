@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  config-server:
+    image: eclipse-temurin:17
+    container_name: config-server
+    hostname: config-server
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config-server/target/config-server.jar:/opt/app/config-server.jar
+      - ./config-repo:/opt/app/config-repo
+    command: ["java", "-jar", "/opt/app/config-server.jar"]
+
+  config-client:
+    image: eclipse-temurin:17
+    container_name: config-client
+    hostname: config-client
+    depends_on:
+      - config-server
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./config-client/target/config-client.jar:/opt/app/config-client.jar
+    command: ["java", "-jar", "/opt/app/config-client.jar"]
+
