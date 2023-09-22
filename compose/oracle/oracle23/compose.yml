@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+
+  oracle:
+    image: container-registry.oracle.com/database/free
+    container_name: oracle
+    hostname: oracle
+    ports:
+      - "1521:1521"
+    environment:
+      - ORACLE_PWD=FFllyywwaayy00!!
