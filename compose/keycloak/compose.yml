@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    hostname: keycloak
+    container_name: keycloak
+    ports:
+      - 8080:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./compose/keycloak/data/import:/opt/keycloak/data/import
+    command:
+      - start-dev --import-realm
