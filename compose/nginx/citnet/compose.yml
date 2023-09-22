@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+
+  nginx:
+    image: nginx
+    hostname: nginx
+    container_name: nginx
+    volumes:
+      - ./compose/nginx/nexus.conf:/etc/nginx/conf.d/nexus.conf
+    ports:
+      - "9780:9780"
+#      - "8080:80"
+#    environment:
+#      - NGINX_HOST=foobar.com
+#      - NGINX_PORT=80
