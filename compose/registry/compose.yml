@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+
+  registry:
+    image: registry
+    hostname: registry
+    container_name: registry
+    ports:
+      - "5000:5000"
