@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+
+  wso2am:
+    image: wso2/wso2am:3.2.0
+    hostname: wso2am
+    container_name: wso2am
+    ports:
+      - "8280:8280"
+      - "8243:8243"
+      - "9443:9443"
