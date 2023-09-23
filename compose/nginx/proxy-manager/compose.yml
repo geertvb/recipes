@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+
+  proxy-manager:
+    image: jc21/nginx-proxy-manager
+    hostname: proxy-manager
+    container_name: proxy-manager
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./compose/proxy-manager/data:/data
+      - ./compose/proxy-manager/secret/letsencrypt:/etc/letsencrypt
