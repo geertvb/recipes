@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+
+  git:
+    image: ynohat/git-http-backend
+    hostname: git
+    container_name: git
+    volumes:
+      - ./compose/git/data:/git
+    ports:
+      - "8080:80"

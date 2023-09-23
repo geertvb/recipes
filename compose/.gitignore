@@ -1,2 +1,6 @@
+
 data/
 logs/
+
+!git/smart/compose/git/data/
+!git/dumb/compose/git/data/

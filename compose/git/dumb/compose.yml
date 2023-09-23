@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+
+  git:
+    image: nginx
+    hostname: nginx
+    container_name: nginx
+    volumes:
+      - ./compose/git/data:/usr/share/nginx/html
+    ports:
+      - "8080:80"
