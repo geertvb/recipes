@@ -12,6 +12,7 @@
 
     <modules>
         <module>spring-cloud-config</module>
+        <module>spring-jpa-sql-logging</module>
     </modules>
 
     <properties>

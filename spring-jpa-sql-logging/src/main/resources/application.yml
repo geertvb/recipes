@@ -1,0 +1,38 @@
+
+info:
+  app:
+    name: recipe-jpa-sql-logging
+    description: Recipe to test JPA SQL logging
+    version: 1.0.0-SNAPSHOT
+
+management:
+  info:
+    build:
+      enabled: true
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    enabled-by-default: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+spring:
+  jpa:
+    open-in-view: false
+    show-sql: true
+
+logging:
+  level:
+    sql: debug
+    org.hibernate.orm.jdbc.bind: trace
+    root: info
