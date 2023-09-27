@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+
+  collector:
+    image: otel/opentelemetry-collector-contrib
+    hostname: collector
+    container_name: collector
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./compose/otel/config/config.yaml:/etc/otelcol-contrib/config.yaml
+      - ./compose/otel/data/:/var/otel/data/
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.0
+    container_name: elasticsearch
+    hostname: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - node.name=elasticsearch
+      - cluster.name=elk
+      - ELASTIC_PASSWORD=welcome1
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - xpack.license.self_generated.type=basic
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.7.0
+    container_name: kibana
+    hostname: kibana
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=welcome1
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch

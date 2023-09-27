@@ -1,0 +1,25 @@
+receivers:
+  tcplog:
+    listen_address: "0.0.0.0:5000"
+    operators:
+      - type: json_parser
+        parse_from: body
+
+processors:
+  batch:
+
+exporters:
+  elasticsearch:
+    endpoints: [http://elasticsearch:9200]
+    logs_index: my_log_index
+    sending_queue:
+      enabled: true
+      num_consumers: 20
+      queue_size: 1000
+
+service:
+  pipelines:
+    logs:
+      receivers: [tcplog]
+      processors: [batch]
+      exporters: [elasticsearch]
