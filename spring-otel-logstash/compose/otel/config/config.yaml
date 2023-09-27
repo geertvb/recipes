@@ -4,6 +4,9 @@ receivers:
     operators:
       - type: json_parser
         parse_from: body
+        timestamp:
+          parse_from: attributes.@timestamp
+          layout: '%Y-%m-%dT%H:%M:%S.%s%j'
 
 processors:
   batch:
