@@ -1,0 +1,18 @@
+POST http://localhost:8080/messages/ClaimTask
+Content-Type: application/json
+
+###
+
+POST http://localhost:8080/messages/CompleteTask
+Content-Type: application/json
+
+###
+
+POST http://localhost:8080/messages/TaskCompleted
+Content-Type: application/json
+
+###
+
+POST http://localhost:8080/messages/TaskClaimed
+Content-Type: application/json
+
