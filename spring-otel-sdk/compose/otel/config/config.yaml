@@ -9,7 +9,7 @@ processors:
 
 exporters:
   elasticsearch:
-    endpoints: [http://elasticsearch:9200]
+    endpoints: [http://nginx:9200]
     logs_index: my_log_index
     sending_queue:
       enabled: true
