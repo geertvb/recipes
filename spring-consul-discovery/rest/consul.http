@@ -1,0 +1,21 @@
+GET http://localhost:8500/v1/catalog
+Accept: application/json
+Content-Type: application/json
+
+### Services
+
+GET http://localhost:8500/v1/catalog/services
+Accept: application/json
+Content-Type: application/json
+
+### address-service
+
+GET http://localhost:8500/v1/catalog/service/address-service
+Accept: application/json
+Content-Type: application/json
+
+### person-service
+
+GET http://localhost:8500/v1/catalog/service/person-service
+Accept: application/json
+Content-Type: application/json

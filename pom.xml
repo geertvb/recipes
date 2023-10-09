@@ -15,6 +15,7 @@
         <module>spring-jpa-sql-logging</module>
         <module>spring-otel-logstash</module>
         <module>spring-otel-sdk</module>
+        <module>spring-consul-discovery</module>
     </modules>
 
     <properties>
