@@ -16,6 +16,7 @@
         <module>spring-otel-logstash</module>
         <module>spring-otel-sdk</module>
         <module>spring-consul-discovery</module>
+        <module>spring-resolvable-types</module>
     </modules>
 
     <properties>
