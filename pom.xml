@@ -17,6 +17,7 @@
         <module>spring-otel-sdk</module>
         <module>spring-consul-discovery</module>
         <module>spring-resolvable-types</module>
+        <module>spring-kafka-trace</module>
     </modules>
 
     <properties>

@@ -1,0 +1,29 @@
+
+management:
+  tracing:
+    enabled: true
+    propagation:
+      consume: b3, b3_multi, w3c
+      produce: b3
+      type: b3
+
+spring:
+  kafka:
+    listener:
+      concurrency: 10
+    consumer:
+      group-id: xxx
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    bootstrap-servers: localhost:9092
+
+logging:
+  pattern:
+    console: >-
+      %clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p})
+      %clr(${PID:- }){magenta} %clr(---){faint} %clr(${LOGGED_APPLICATION_NAME:-}[%15.15t]){faint}
+      %clr(${LOG_CORRELATION_PATTERN:-}){faint}%clr(%-40.40logger{39}){cyan}
+      %clr(:){faint} %X{traceId:-} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
