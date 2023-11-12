@@ -45,9 +45,11 @@ Accept: application/json
   "name": "minio-sink-connector",
   "config": {
     "connector.class": "io.confluent.connect.s3.S3SinkConnector",
+    "transforms": "backupTransformation",
+    "transforms.backupTransformation.type": "org.b8.kafka.connect.transforms.BackupTransformation",
     "tasks.max": "1",
     "format.class": "io.confluent.connect.s3.format.json.JsonFormat",
-    "store.kafka.keys": "true",
+    "store.kafka.keys": "false",
     "keys.format.class": "io.confluent.connect.s3.format.json.JsonFormat",
     "store.kafka.headers": "false",
     "headers.format.class": "io.confluent.connect.s3.format.bytearray.ByteArrayFormat",

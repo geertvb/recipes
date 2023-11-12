@@ -54,12 +54,15 @@ services:
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
       AWS_ACCESS_KEY_ID: admin
       AWS_SECRET_ACCESS_KEY: welcome1
+    volumes:
+      - ./compose/kafka-connect/plugins/eightBorg-backupTransformation-1.0.0.zip:/tmp/eightBorg-backupTransformation-1.0.0.zip
     command:
       - bash
       - -c
       - |
         echo "Installing Connector"
         confluent-hub install --no-prompt confluentinc/kafka-connect-s3:latest
+        confluent-hub install --no-prompt /tmp/eightBorg-backupTransformation-1.0.0.zip
         #
         echo "Launching Kafka Connect worker"
         /etc/confluent/docker/run &
