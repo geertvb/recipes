@@ -34,6 +34,10 @@ Use Kafka connectors to
   - Producer service/application
   - traceId
 
+### Choices
+
+- Use https://github.com/Aiven-Open/opensearch-connector-for-apache-kafka
+
 ## Compose
 
 ```shell
