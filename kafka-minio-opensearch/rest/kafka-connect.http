@@ -1,0 +1,81 @@
+### Get connector plugins
+
+GET http://localhost:8083/connector-plugins
+Content-Type: application/json
+Accept: application/json
+
+
+### Get connectors
+
+GET http://localhost:8083/connectors
+Content-Type: application/json
+Accept: application/json
+
+### Get connector
+
+GET http://localhost:8083/connectors/minio-sink-connector
+Content-Type: application/json
+Accept: application/json
+
+### Get connector status
+
+GET http://localhost:8083/connectors/minio-sink-connector/status
+Content-Type: application/json
+Accept: application/json
+
+### Get connector tasks
+
+GET http://localhost:8083/connectors/minio-sink-connector/tasks
+Content-Type: application/json
+Accept: application/json
+
+### Get connector info
+
+GET http://localhost:8083/connectors/minio-sink-connector/info
+Content-Type: application/json
+Accept: application/json
+
+### Create connector
+
+POST http://localhost:8083/connectors
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "minio-sink-connector",
+  "config": {
+    "connector.class": "io.confluent.connect.s3.S3SinkConnector",
+    "tasks.max": "1",
+    "format.class": "io.confluent.connect.s3.format.json.JsonFormat",
+    "store.kafka.keys": "true",
+    "keys.format.class": "io.confluent.connect.s3.format.json.JsonFormat",
+    "store.kafka.headers": "false",
+    "headers.format.class": "io.confluent.connect.s3.format.bytearray.ByteArrayFormat",
+    "flush.size": "64",
+    "topics": "test-topic",
+    "rotate.schedule.interval.ms": "1000",
+    "timezone": "UTC",
+    "s3.compression.type": "none",
+    "s3.bucket.name": "test-bucket",
+    "s3.region": "us-east-1",
+    "s3.part.size": "5242880",
+    "s3.object.tagging.enabled": "true",
+    "storage.class": "io.confluent.connect.s3.storage.S3Storage",
+    "store.url": "http://minio:9000",
+    "partitioner.class": "io.confluent.connect.storage.partitioner.DefaultPartitioner",
+    "path.format": "YYYY/MM/dd/HH"
+  }
+}
+
+### Update connector
+
+PUT http://localhost:8083/connectors/minio-sink-connector/config
+Content-Type: application/json
+
+{
+}
+
+### Delete connector
+
+DELETE http://localhost:8083/connectors/minio-sink-connector
+Content-Type: application/json
