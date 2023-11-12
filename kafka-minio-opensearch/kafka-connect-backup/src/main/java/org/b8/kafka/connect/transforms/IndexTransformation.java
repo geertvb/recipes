@@ -4,23 +4,29 @@ import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.transforms.Transformation;
 
+import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
-
-import static org.b8.kafka.connect.transforms.mapper.BackupRecordMapper.mapSinkRecord;
 
 public class IndexTransformation implements Transformation<SinkRecord> {
 
     @Override
     public SinkRecord apply(SinkRecord sinkRecord) {
-        var newValue = mapSinkRecord(sinkRecord).toString();
-//        var newValue = "{\"aaa\":\"bbb\"}";
+        var newValue = new HashMap<>();
+        newValue.put("topic", sinkRecord.topic());
+        newValue.put("partition", sinkRecord.kafkaPartition());
+        newValue.put("offset", sinkRecord.kafkaOffset());
+        newValue.put("@timestamp", "" + Instant.ofEpochMilli(sinkRecord.timestamp()));
+        newValue.put("timestamp", sinkRecord.timestamp());
+        newValue.put("key", "" + sinkRecord.key());
+        newValue.put("value", "" + sinkRecord.value());
 
         return new SinkRecord(
                 sinkRecord.topic(),
                 sinkRecord.kafkaPartition(),
                 sinkRecord.keySchema(),
                 sinkRecord.key(),
-                null,
+                sinkRecord.valueSchema(),
                 newValue,
                 sinkRecord.kafkaOffset(),
                 sinkRecord.timestamp(),
