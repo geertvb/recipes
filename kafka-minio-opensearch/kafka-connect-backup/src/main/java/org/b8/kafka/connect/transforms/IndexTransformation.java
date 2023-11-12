@@ -20,6 +20,10 @@ public class IndexTransformation implements Transformation<SinkRecord> {
         newValue.put("timestamp", sinkRecord.timestamp());
         newValue.put("key", "" + sinkRecord.key());
         newValue.put("value", "" + sinkRecord.value());
+        if (sinkRecord.headers() != null) {
+            sinkRecord.headers().forEach(header ->
+                    newValue.put("headers." + header.key(), "" + header.value()));
+        }
 
         return new SinkRecord(
                 sinkRecord.topic(),
