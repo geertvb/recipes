@@ -5,14 +5,14 @@ import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.transforms.Transformation;
 
 import java.time.Instant;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class IndexTransformation implements Transformation<SinkRecord> {
 
     @Override
     public SinkRecord apply(SinkRecord sinkRecord) {
-        var newValue = new HashMap<>();
+        var newValue = new LinkedHashMap<>();
         newValue.put("topic", sinkRecord.topic());
         newValue.put("partition", sinkRecord.kafkaPartition());
         newValue.put("offset", sinkRecord.kafkaOffset());

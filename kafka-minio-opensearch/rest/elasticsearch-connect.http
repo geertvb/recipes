@@ -45,8 +45,9 @@ Accept: application/json
   "name": "elasticsearch-connector",
   "config": {
     "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
-    "transforms": "indexTransformation",
+    "transforms": "indexTransformation,tracingTransformation",
     "transforms.indexTransformation.type": "org.b8.kafka.connect.transforms.IndexTransformation",
+    "transforms.tracingTransformation.type": "org.b8.kafka.connect.transforms.TracingTransformation",
     "tasks.max": "1",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
