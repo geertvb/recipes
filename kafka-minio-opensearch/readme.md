@@ -1,3 +1,39 @@
+## Objectives
+
+Use Kafka connectors to
+- Backup Kafka topics to S3 (Minio)
+- Improve message observability
+  - Index messages of all topics to OpenSearch
+  - Create a trace of Kafka messages
+  - Create metrics of Kafka messages
+
+## Backup Kafka topics to Minio
+
+### Challenges
+
+- Find a practical storage bucket and folder structure
+- Choose a practical file format
+- Capture all metadata: partition, offset, timestamp, headers ...
+
+### Choices
+
+- File format: json lines (jsonl)
+- Create a Kafka connect plugin and implement a Transformation.
+    See: https://www.confluent.io/blog/kafka-connect-single-message-transformation-tutorial-with-examples/
+
+## Observability
+
+### Challenges
+
+- Index all data and metadata
+- Avoid too many fields error
+- Convert protobuf to json
+- Manage indexes and retention
+- Capture special fields
+  - Timestamp
+  - Producer service/application
+  - traceId
+
 ## Compose
 
 ```shell
