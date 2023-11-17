@@ -1,0 +1,64 @@
+mindmap
+    root ((Kafka Connect))
+        Logical Backup
+            Transformations
+                Key -> base64
+                Value -> base64
+                Headers -> base64
+            How
+                Files
+                Json lines
+            Where - S3
+                folder & file name: Topic, time, counter
+                Max lines and/or size per file
+            Theoretically recoverable
+            Usage
+                Reporting tool
+                Problem solvers - Replaying messages
+        Observability
+            Logging
+                Transformations
+                    Data -> json
+                    Key -> string
+                    Headers -> string?
+                Indexing
+                    Timestamp
+                    TraceID
+                    Kafka metadata
+                    Data as single string!!!
+                    Headers as strings
+                    Extracted
+                        message type?
+                Link to tracing: traceId
+            Metrics
+                TODO
+            Tracing
+                Filterable => pretty, no noise
+                Link to logging: traceId
+                Name: producer - message type - key?
+                    tags
+                    annotations
+                        kafka metadata
+                        key
+                        headers
+                        value???
+            Usage
+                Developers - verifying/testing
+                Problem solvers - diagnosing
+        Proto -> JSON
+            Data required
+                protobin updates
+                topic -> msg type: Kadyc???
+        Data
+            Kafka structure
+                Topic
+                Partition
+                Offset
+                Timestamp
+                Key
+                Value
+                Headers
+            To be extracted
+                TraceID
+                Producer
+                Message Type
