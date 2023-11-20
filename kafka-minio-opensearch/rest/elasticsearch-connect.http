@@ -56,7 +56,7 @@ Accept: application/json
     "connection.compression": "false",
     "batch.size": "1",
     "flush.timeout.ms": "1000",
-    "topics": "test-topic",
+    "topics.regex": "test-.*",
     "key.ignore": "true",
     "schema.ignore": "true",
     "type.name": "testtype"

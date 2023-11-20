@@ -54,7 +54,7 @@ Accept: application/json
     "store.kafka.headers": "false",
     "headers.format.class": "io.confluent.connect.s3.format.bytearray.ByteArrayFormat",
     "flush.size": "64",
-    "topics": "test-topic",
+    "topics.regex": "test-.*",
     "rotate.schedule.interval.ms": "1000",
     "timezone": "UTC",
     "s3.compression.type": "none",

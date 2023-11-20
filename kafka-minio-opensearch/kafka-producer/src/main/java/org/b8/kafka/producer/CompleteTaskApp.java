@@ -9,7 +9,6 @@ import org.apache.kafka.common.header.internals.RecordHeader;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.function.Supplier;
 
 import static java.lang.Long.toHexString;
@@ -27,8 +26,6 @@ public class CompleteTaskApp {
     private final Supplier<String> traceIdSupplier = () -> toHexString(random.nextLong());
 
     private final Supplier<String> idSupplier = () -> UUID.randomUUID().toString();
-
-    private final ExecutorService executorService = newFixedThreadPool(10);
 
     private Properties producerProperties() {
         Properties props = new Properties();
@@ -74,13 +71,13 @@ public class CompleteTaskApp {
         var taskId = idSupplier.get();
         var traceId = traceIdSupplier.get();
 
-        kafkaProducer.send(producerRecord("test-topic", taskId, "ClaimTask", "task-details", traceId));
+        kafkaProducer.send(producerRecord("test-command-task-provider", taskId, "ClaimTask", "task-details", traceId));
         wait(100, 1000);
-        kafkaProducer.send(producerRecord("test-topic", taskId, "ResolveAllocation", "task-provider", traceId));
+        kafkaProducer.send(producerRecord("test-command-task-allocation", taskId, "ResolveAllocation", "task-provider", traceId));
         wait(10, 100);
-        kafkaProducer.send(producerRecord("test-topic", taskId, "AllocationResolved", "task-allocation", traceId));
+        kafkaProducer.send(producerRecord("test-event", taskId, "AllocationResolved", "task-allocation", traceId));
         wait(100, 2000);
-        kafkaProducer.send(producerRecord("test-topic", taskId, "TaskClaimed", "task-provider", traceId));
+        kafkaProducer.send(producerRecord("test-event", taskId, "TaskClaimed", "task-provider", traceId));
 
         return "";
     }
@@ -91,7 +88,9 @@ public class CompleteTaskApp {
             callables.add(this::completeTask);
         }
 
-        List<Future<String>> futures = executorService.invokeAll(callables);
+        ExecutorService executorService = newFixedThreadPool(callables.size());
+        executorService.invokeAll(callables);
+        executorService.shutdown();
     }
 
     public static void main(String... args) throws Exception {
