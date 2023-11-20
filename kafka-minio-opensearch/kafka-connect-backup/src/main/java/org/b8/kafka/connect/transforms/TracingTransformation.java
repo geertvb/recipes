@@ -1,8 +1,12 @@
 package org.b8.kafka.connect.transforms;
 
-import brave.ScopedSpan;
+import brave.Clock;
+import brave.Span;
 import brave.Tracer;
 import brave.Tracing;
+import brave.internal.codec.HexCodec;
+import brave.propagation.TraceContextOrSamplingFlags;
+import brave.propagation.TraceIdContext;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.transforms.Transformation;
@@ -11,30 +15,53 @@ import zipkin2.reporter.brave.ZipkinSpanHandler;
 import zipkin2.reporter.okhttp3.OkHttpSender;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 
 public class TracingTransformation implements Transformation<SinkRecord> {
 
     protected OkHttpSender sender;
     protected ZipkinSpanHandler zipkinSpanHandler;
-    protected Tracing tracing;
-    protected Tracer tracer;
+    protected Map<String, Tracing> tracingCache = new HashMap<>();
+    protected Map<String, Tracer> tracerCache = new HashMap<>();
+
+    protected String getHeader(SinkRecord sinkRecord, String key) {
+        return "" + sinkRecord
+                    .headers()
+                    .lastWithName(key)
+                    .value();
+    }
 
     @Override
     public SinkRecord apply(SinkRecord sinkRecord) {
-        ScopedSpan span = tracer.startScopedSpan("trace-connect");
+        var traceId = getHeader(sinkRecord, "X-B3-TraceId");
+        var application = getHeader(sinkRecord, "application");
+        var typeId = getHeader(sinkRecord, "__typeId__");
+
+        TraceIdContext traceIdContext = TraceIdContext.newBuilder()
+                    .traceId(HexCodec.lowerHexToUnsignedLong(traceId))
+                    .sampled(true)
+                    .build();
+
+        TraceContextOrSamplingFlags extracted = TraceContextOrSamplingFlags.newBuilder(traceIdContext).build();
+        Span span = getTracer(application)
+                    .nextSpan(extracted)
+                    .name(typeId + "(" + sinkRecord.key() + ")")
+                    .remoteServiceName(application)
+                    .start();
         try {
             span.tag("topic", sinkRecord.topic());
             span.tag("partition", "" + sinkRecord.kafkaPartition());
             span.tag("offset", "" + sinkRecord.kafkaOffset());
             span.tag("timestamp", "" + Instant.ofEpochMilli(sinkRecord.timestamp()));
-            // TODO: headers, message type, ...
             return sinkRecord;
         } catch (RuntimeException | Error e) {
             span.error(e); // Unless you handle exceptions, you might not know the operation failed!
             throw e;
         } finally {
-            span.finish(); // always finish the span
+            Clock clock = getTracing(application).clock(span.context());
+            long finishMicros = clock.currentTimeMicroseconds() + 100000;
+            span.finish(finishMicros); // always finish the span
         }
     }
 
@@ -45,20 +72,27 @@ public class TracingTransformation implements Transformation<SinkRecord> {
 
     @Override
     public void close() {
-        tracing.close();
+        tracingCache.values().forEach(Tracing::close);
         zipkinSpanHandler.close();
         sender.close();
+    }
+
+    protected Tracing getTracing(String serviceName) {
+        return tracingCache.computeIfAbsent(serviceName, name -> Tracing.newBuilder()
+                    .localServiceName("KC_" + name)
+                    .addSpanHandler(zipkinSpanHandler)
+                    .build());
+    }
+
+    protected Tracer getTracer(String serviceName) {
+        return tracerCache.computeIfAbsent(serviceName, name -> getTracing(name)
+                    .tracer());
     }
 
     @Override
     public void configure(Map<String, ?> map) {
         var sender = OkHttpSender.create("http://zipkin:9411/api/v2/spans");
         zipkinSpanHandler = AsyncZipkinSpanHandler.create(sender);
-        tracing = Tracing.newBuilder()
-                .localServiceName("kafka-connect")
-                .addSpanHandler(zipkinSpanHandler)
-                .build();
-        tracer = tracing.tracer();
     }
 
 }

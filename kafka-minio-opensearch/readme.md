@@ -40,6 +40,8 @@ Use Kafka connectors to
 
 ## Compose
 
+Remember to build the project before spinning up docker compose.
+
 ```shell
 docker-compose up -d
 ```
