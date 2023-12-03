@@ -31,5 +31,15 @@ logging:
     root: info
 
 spring:
+  kafka:
+    consumer:
+      group-id: elastic-bulk
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    listener:
+      concurrency: 10
   elasticsearch:
     uris: http://localhost:9200

@@ -7,3 +7,15 @@ Content-Type: application/json
   "firstName": "{{$random.alphabetic(8)}}",
   "lastName": "{{$random.alphabetic(12)}}"
 }
+
+### Bulk via Kafka
+
+POST http://localhost:8080/persons/bulk
+Content-Type: application/json
+
+{
+  "id": "{{$random.uuid}}",
+  "version": 1,
+  "firstName": "{{$random.alphabetic(8)}}",
+  "lastName": "{{$random.alphabetic(12)}}"
+}

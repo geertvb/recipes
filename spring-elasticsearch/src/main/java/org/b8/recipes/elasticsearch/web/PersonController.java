@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.b8.recipes.elasticsearch.model.PersonEntity;
 import org.b8.recipes.elasticsearch.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,9 @@ public class PersonController {
     @Autowired
     PersonRepository personRepository;
 
+    @Autowired
+    KafkaTemplate<String, Object> kafkaTemplate;
+
     @PostMapping
     public void createPerson(@RequestBody PersonEntity personEntity) {
         long start = System.nanoTime();
@@ -28,6 +32,16 @@ public class PersonController {
         }
         long duration = System.nanoTime() - start;
         log.info("Execution took {} nanos", duration);
+    }
+
+    @PostMapping(path = "/bulk")
+    public void createBulk(@RequestBody PersonEntity personEntity) {
+        String firstName = personEntity.getFirstName();
+        for (long i = 1; i < 100; i++) {
+            personEntity.setVersion(i);
+            personEntity.setFirstName(firstName + "-" + i);
+            kafkaTemplate.send("persons", personEntity.getId(), personEntity);
+        }
     }
 
 }
