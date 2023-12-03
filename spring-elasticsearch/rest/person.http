@@ -1,0 +1,9 @@
+POST http://localhost:8080/persons
+Content-Type: application/json
+
+{
+  "id": "{{$random.uuid}}",
+  "version": 1,
+  "firstName": "{{$random.alphabetic(8)}}",
+  "lastName": "{{$random.alphabetic(12)}}"
+}

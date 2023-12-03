@@ -18,6 +18,7 @@
         <module>spring-consul-discovery</module>
         <module>spring-resolvable-types</module>
         <module>spring-kafka-trace</module>
+        <module>spring-elasticsearch</module>
     </modules>
 
     <properties>
