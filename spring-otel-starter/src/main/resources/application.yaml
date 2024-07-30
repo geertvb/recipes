@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: spring-otel-starter-backend
@@ -12,8 +11,8 @@ management:
   tracing:
     enabled: true
     propagation:
-      consume: [w3c,b3,b3_multi]
-      produce: [w3c,b3]
+      consume: [ w3c,b3,b3_multi ]
+      produce: [ w3c,b3 ]
     sampling:
       probability: 1
 #  metrics:
@@ -24,6 +23,12 @@ management:
 #        enabled: false
 
 otel:
+  traces:
+    exporter: otlp
+  metrics:
+    exporter: otlp
+  logs:
+    exporter: otlp
   propagators:
     - tracecontext
     - b3
@@ -34,3 +39,7 @@ otel:
       service:
         name: spring-otel-starter-backend
         namespace: internal
+  exporter:
+    otlp:
+      protocol: http/protobuf
+      endpoint: "http://localhost:4318"
