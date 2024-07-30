@@ -4,4 +4,4 @@ akhq:
   connections:
     kafka:
       properties:
-        bootstrap.servers: "kafka:29093"
+        bootstrap.servers: "kafka:29092"
