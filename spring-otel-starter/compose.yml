@@ -19,7 +19,7 @@ services:
     ports:
       - "4900:4900"
     volumes:
-      - ./compose/data-prepper/config/otel.yaml:/usr/share/data-prepper/pipelines/otel.yaml
+      - ./compose/data-prepper/config/pipelines/:/usr/share/data-prepper/pipelines/
     depends_on:
       - opensearch
 

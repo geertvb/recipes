@@ -1,0 +1,36 @@
+
+traces-source-pipeline:
+  source:
+    otel_trace_source:
+      ssl: false
+  sink:
+    - pipeline:
+        name: "traces-span-pipeline"
+    - pipeline:
+        name: "traces-service-map-pipeline"
+
+traces-span-pipeline:
+  source:
+    pipeline:
+      name: "traces-source-pipeline"
+  processor:
+    - otel_trace_raw:
+  sink:
+    - opensearch:
+        hosts: [ "http://opensearch:9200" ]
+        index: otel-v1-apm-span-%{yyyy.MM.dd}
+        number_of_replicas: 0
+        index_type: trace-analytics-raw
+
+traces-service-map-pipeline:
+  source:
+    pipeline:
+      name: "traces-source-pipeline"
+  processor:
+    - service_map_stateful:
+  sink:
+    - opensearch:
+        hosts: [ "http://opensearch:9200" ]
+        index: otel-v1-apm-service-map
+        number_of_replicas: 0
+        index_type: trace-analytics-service-map

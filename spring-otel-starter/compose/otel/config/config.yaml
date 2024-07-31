@@ -34,13 +34,13 @@ service:
   pipelines:
     traces:
       receivers: [ otlp ]
-      processors: [  ]
+      processors: [ batch ]
       exporters: [ otlp/trace ]
     metrics:
       receivers: [ otlp ]
-      processors: [  ]
+      processors: [ batch ]
       exporters: [ otlp/metrics ]
     logs:
       receivers: [ otlp ]
-      processors: [  ]
+      processors: [ batch ]
       exporters: [ otlp/logs ]
