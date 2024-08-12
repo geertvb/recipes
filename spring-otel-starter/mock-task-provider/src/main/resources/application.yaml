@@ -1,0 +1,63 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: task-provider
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: task-provider-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+    listener:
+      observation-enabled: true
+      concurrency: 10
+    template:
+      observation-enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    enabled-by-default: true
+  tracing:
+    enabled: true
+    propagation:
+      consume: [ w3c,b3,b3_multi ]
+      produce: [ w3c,b3 ]
+    sampling:
+      probability: 1
+#  metrics:
+#    kafka:
+#      consumer:
+#        enabled: false
+#      producer:
+#        enabled: false
+
+otel:
+  traces:
+    exporter: otlp
+  metrics:
+    exporter: otlp
+  logs:
+    exporter: otlp
+  propagators:
+    - tracecontext
+    - b3
+    - b3multi
+  resource:
+    attributes:
+      deployment.environment: dev
+      service:
+        name: spring-otel-starter-backend
+        namespace: internal
+  exporter:
+    otlp:
+      protocol: http/protobuf
+      endpoint: "http://localhost:4318"

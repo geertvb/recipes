@@ -1,6 +1,21 @@
 spring:
   application:
-    name: spring-otel-starter-backend
+    name: task-center
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: task-center-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+    listener:
+      observation-enabled: true
+      concurrency: 10
+    template:
+      observation-enabled: true
 
 management:
   endpoints:

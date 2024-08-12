@@ -1,0 +1,9 @@
+### Complete task
+
+POST localhost:8080/tasks/{{$random.uuid}}/complete
+Content-Type: application/json
+
+{
+  "taskId": "{{$random.uuid}}",
+  "userId": "{{$random.alphabetic(8)}}"
+}
