@@ -26,13 +26,13 @@ management:
       exposure:
         include: "*"
     enabled-by-default: true
-  tracing:
-    enabled: true
-    propagation:
-      consume: [ w3c,b3,b3_multi ]
-      produce: [ w3c,b3 ]
-    sampling:
-      probability: 1
+#  tracing:
+#    enabled: true
+#    propagation:
+#      consume: [ w3c,b3,b3_multi ]
+#      produce: [ w3c,b3 ]
+#    sampling:
+#      probability: 1
 #  metrics:
 #    kafka:
 #      consumer:
@@ -43,6 +43,8 @@ management:
 otel:
   traces:
     exporter: otlp
+    sampler:
+      arg: 1
   metrics:
     exporter: otlp
   logs:
@@ -55,7 +57,7 @@ otel:
     attributes:
       deployment.environment: dev
       service:
-        name: spring-otel-starter-backend
+#        name: spring-otel-starter-backend
         namespace: internal
   exporter:
     otlp:

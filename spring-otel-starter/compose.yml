@@ -26,6 +26,15 @@ services:
       CLUSTER_ID: 'ZVdxSsRfdkS7IcLbYbGi5g'
       KAFKA_NUM_PARTITIONS: 10
 
+  akhq:
+    image: tchiotludo/akhq
+    hostname: akhq
+    container_name: akhq
+    ports:
+      - "8079:8080"
+    volumes:
+      - ./compose/akhq/config/application.yml:/app/application.yml
+
   collector:
     image: otel/opentelemetry-collector-contrib
     hostname: collector
