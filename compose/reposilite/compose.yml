@@ -1,0 +1,16 @@
+
+services:
+
+  reposilite:
+    image: dzikoysk/reposilite
+    hostname: reposilite
+    container_name: reposilite
+    ports:
+      - 8080:8080
+    environment:
+      REPOSILITE_OPTS: >-
+        --local-configuration=/app/configuration.cdn
+        --token admin:welcome1
+    volumes:
+      - ./compose/reposilite/config/configuration.cdn:/app/configuration.cdn
+      - ./compose/reposilite/data/:/app/data/
